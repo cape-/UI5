@@ -7,5 +7,5 @@
 			m = m < 10 ? `0${m}`: m;
 			s = s < 10 ? `0${s}`: s;
 
-        	return `${h}:${m}:${s}`;
+        	return !isNaN(oTime.ms) ? `${h}:${m}:${s}` : '';
         },
