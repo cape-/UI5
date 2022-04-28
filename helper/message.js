@@ -1,5 +1,3 @@
-// Initialize in controler as follows:
-//   message.setI18nModel(this.getOwnerComponent().getModel("i18n"));
 sap.ui.define([
 	"sap/m/MessageBox",
 	"sap/m/MessageToast"
@@ -18,6 +16,11 @@ sap.ui.define([
 				title: this._oBundle.getText(sMessage + "Title")
 			});
 		},
+		die(sMessage, fCallback) {
+			return MessageBox.error(sMessage, {
+				onClose: fCallback
+			});
+		},
 		error(sMessage) {
 			return MessageBox.error(this._oBundle.getText(sMessage), {
 				title: this._oBundle.getText(sMessage + "Title")
@@ -28,6 +31,18 @@ sap.ui.define([
 				title: this._oBundle.getText(sMessage + "Title"),
 				onClose: fCallback
 			});
+		},
+		showHTTPError(oErr) {
+			const sDefaultHTTPErrorMessage = "DefaultHTTPErrorMessage";
+			var sMessage;
+			try {
+				// Retrieve GW error detail
+				sMessage = JSON.parse(oErr.response.body).error.message.value;
+			} catch (e) {
+				// else use default error message (undescriptive)
+				sMessage = oErr.message;
+			}
+			return MessageBox.error(this._oBundle.getText(sDefaultHTTPErrorMessage,sMessage));
 		}
 	};
 });
