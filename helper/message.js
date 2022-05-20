@@ -9,28 +9,39 @@ sap.ui.define([
 			this._oBundle = oModel.getResourceBundle();
 		},
 		toast(sMessage) {
-			return MessageToast.show(this._oBundle.getText(sMessage));
+			return new Promise((resolve) => MessageToast.show(this._oBundle.getText(sMessage), {
+				onClose: resolve
+			}));
 		},
 		alert(sMessage) {
-			return MessageBox.alert(this._oBundle.getText(sMessage), {
-				title: this._oBundle.getText(sMessage + "Title")
-			});
+			return new Promise((resolve) => MessageBox.alert(this._oBundle.getText(sMessage), {
+				title: this._oBundle.getText(sMessage + "Title"),
+				onClose: resolve
+			}));
 		},
-		die(sMessage, fCallback) {
-			return MessageBox.error(sMessage, {
-				onClose: fCallback
-			});
+		die(sMessage) {
+			return new Promise((resolve) => MessageBox.error(sMessage, {
+				onClose: resolve
+			}));
 		},
 		error(sMessage) {
-			return MessageBox.error(this._oBundle.getText(sMessage), {
-				title: this._oBundle.getText(sMessage + "Title")
-			});
-		},
-		confirm(sMessage, fCallback) {
-			return MessageBox.confirm(this._oBundle.getText(sMessage), {
+			return new Promise((resolve) => MessageBox.error(this._oBundle.getText(sMessage), {
 				title: this._oBundle.getText(sMessage + "Title"),
-				onClose: fCallback
-			});
+				onClose: resolve
+			}));
+		},
+		success(sMessage, aPlaceholders, oOptions) {
+			return new Promise((resolve) => MessageBox.success(this._oBundle.getText(sMessage, aPlaceholders), {
+				title: this._oBundle.getText(sMessage + "Title"),
+				onClose: resolve,
+				...oOptions
+			}));
+		},
+		confirm(sMessage) {
+			return new Promise((resolve) => MessageBox.confirm(this._oBundle.getText(sMessage), {
+				title: this._oBundle.getText(sMessage + "Title"),
+				onClose: resolve
+			}));
 		},
 		showHTTPError(oErr) {
 			const sDefaultHTTPErrorMessage = "DefaultHTTPErrorMessage";
@@ -42,7 +53,9 @@ sap.ui.define([
 				// else use default error message (undescriptive)
 				sMessage = oErr.message;
 			}
-			return MessageBox.error(this._oBundle.getText(sDefaultHTTPErrorMessage,sMessage));
+			return new Promise((resolve) => MessageBox.error(this._oBundle.getText(sDefaultHTTPErrorMessage, sMessage), {
+				onClose: resolve
+			}));
 		}
 	};
 });
