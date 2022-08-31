@@ -19,6 +19,6 @@
 			const aFileContent = oEvent.target.result; // file content as ArrayBuffer
 			const oWorkbook = XLSX.read(aFileContent);
 			 // aData will be an array of sheets, each one as an array of rows: [[{A:"", B:"", ...}]]
-			const aData = oWorkbook.SheetNames.map(sSheetName => XLSX.utils.sheet_to_json(oWorkbook.Sheets[sSheetName], aColNames);
+			const aData = oWorkbook.SheetNames.map(sSheetName => XLSX.utils.sheet_to_json(oWorkbook.Sheets[sSheetName], aColNames));
 			debugger;
 		}
